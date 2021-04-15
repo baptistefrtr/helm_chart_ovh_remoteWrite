@@ -1,0 +1,19 @@
+server:
+    metricRelabelings:
+      - sourceLabels: ["__name__"]
+        separator: ;
+        regex: .*(http_requests_total)*.
+        targetLabel: metrics_storage
+        replacement: ovh
+        action: replace
+
+    remoteWrite:
+        - url: "https://prometheus.gra1.metrics.ovh.net/remote_write"
+          basic_auth:
+            username: ""
+            password: "fFtiqeWLq_Pe4PMC4H_LLn9oMkrC8Hp6fSlpnQh5dUdJdiSGcrVtxOE4PrCIwfoeGCXV56OAdgwY5X10M1bYnp6l15mwNz09hyccIrstHvXqG2w99qmcwdWMr6EBB03d"
+          writeRelabelConfigs:
+        #regex: '.*(haproxy|traceparts_).*'
+          - sourceLabels: ["metrics_storage"]
+            regex: '(ovh)'
+            action: keep
